@@ -25,6 +25,8 @@ const Detail = ({ postDetails }: IProps) => {
   const videoRef = useRef<HTMLVideoElement>(null)
   const router = useRouter()
 
+  const { userProfile }: any = useAuthStore()
+
   const onVideoClick = () => {
     if (playing) {
       videoRef?.current?.pause()
@@ -40,6 +42,16 @@ const Detail = ({ postDetails }: IProps) => {
       videoRef.current.muted = isVideoMuted
     }
   }, [post, isVideoMuted])
+
+  const handleLike = async (like: boolean) => {
+    if (userProfile) {
+      const response = await axios.put(`${BASE_URL}/api/post/${post._id}`, {
+        userId: userProfile._id,
+        postId: post._id,
+        like
+      })
+    }
+  }
 
 
 
@@ -86,7 +98,6 @@ const Detail = ({ postDetails }: IProps) => {
             </button>
           )}
         </div>
-
       </div>
     </div>
   )
